@@ -34,22 +34,32 @@ localStorage
 return(
 
 <main
-style={{
 
-padding:"80px",
+style={
 
-background:"#050505",
+{
 
-minHeight:"100vh",
+padding:
+"60px",
 
-color:"white"
+background:
+"#040404",
 
-}}
+minHeight:
+"100vh",
+
+color:
+"white"
+
+}
+
+}
 
 >
 
 <h1>
 
+Recovered
 Archive
 
 </h1>
@@ -57,6 +67,18 @@ Archive
 <br/>
 
 {
+
+items.length===0
+
+?
+
+<div>
+
+Nothing archived yet
+
+</div>
+
+:
 
 items.map(
 m=>(
@@ -69,16 +91,20 @@ m.id
 
 style={{
 
-padding:"24px",
-
-border:
-"1px solid rgba(255,255,255,.08)",
+padding:
+32,
 
 marginBottom:
 20,
 
+background:
+"rgba(255,255,255,.03)",
+
+border:
+"1px solid rgba(255,255,255,.08)",
+
 borderRadius:
-20
+28
 
 }}
 
@@ -86,7 +112,10 @@ borderRadius:
 
 <div>
 
-Loss:
+LOSS
+
+{" "}
+
 {m.loss}%
 
 </div>
