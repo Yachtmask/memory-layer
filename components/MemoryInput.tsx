@@ -1,8 +1,13 @@
 "use client";
 
-import {
-useState
-} from "react";
+import { useEffect, useState } from "react";
+
+type Memory = {
+id:number;
+original:string;
+recovered:string;
+loss:number;
+};
 
 export default function MemoryInput(){
 
@@ -17,46 +22,111 @@ setPhase
 ]=useState("");
 
 const[
-result,
-setResult
-]=useState("");
+memory,
+setMemory
+]=useState<
+Memory|null
+>(null);
+
+function saveMemory(
+item:Memory
+){
+
+const old=
+JSON.parse(
+localStorage.getItem(
+"memory_archive"
+)||"[]"
+);
+
+old.unshift(
+item
+);
+
+localStorage.setItem(
+"memory_archive",
+JSON.stringify(
+old.slice(
+0,
+25
+)
+)
+
+);
+
+}
 
 function simulate(){
 
 if(!message)return;
 
+setMemory(
+null
+);
+
 setPhase(
 "encoding"
 );
 
-setTimeout(()=>{
-
+setTimeout(
+()=>{
 setPhase(
 "propagating"
 );
+},
+900
+);
 
-},900);
-
-setTimeout(()=>{
-
+setTimeout(
+()=>{
 setPhase(
 "loss"
 );
-
-},2200);
+},
+2200
+);
 
 setTimeout(()=>{
 
-let chars=
+const chars=
 message.split("");
 
-let keep=
+const kept=
 chars.filter(
-()=>Math.random()>.25
+()=>Math.random()>.32
 );
 
-setResult(
-keep.join("")
+const recovered=
+kept.join("");
+
+const loss=
+100-
+Math.floor(
+(
+kept.length/
+chars.length
+)*100
+);
+
+const item={
+
+id:Date.now(),
+
+original:
+message,
+
+recovered,
+
+loss
+
+};
+
+saveMemory(
+item
+);
+
+setMemory(
+item
 );
 
 setPhase(
@@ -75,7 +145,9 @@ return(
 
 placeholder="Leave something worth preserving"
 
-value={message}
+value={
+message
+}
 
 onChange={
 e=>
@@ -87,7 +159,9 @@ e.target.value
 />
 
 <button
-onClick={simulate}
+onClick={
+simulate
+}
 >
 
 Begin Propagation
@@ -98,15 +172,29 @@ Begin Propagation
 
 phase&&(
 
-<div className="state">
+<div
+className="state"
+>
 
-{phase==="encoding"&&"Encoding memory"}
+{
+phase==="encoding"
+&&"Encoding"
+}
 
-{phase==="propagating"&&"Traversing network"}
+{
+phase==="propagating"
+&&"Traversing"
+}
 
-{phase==="loss"&&"Packet loss detected"}
+{
+phase==="loss"
+&&"Packet loss"
+}
 
-{phase==="recovering"&&"Recovery complete"}
+{
+phase==="recovering"
+&&"Recovered"
+}
 
 </div>
 
@@ -116,17 +204,59 @@ phase&&(
 
 {
 
-result&&(
+memory&&(
 
-<div className="recovered">
+<div
+className="recovered"
+>
 
-<div className="tag">
+<div
+className="tag"
+>
 
-RECOVERED
+ARCHIVED
 
 </div>
 
-{result}
+<div>
+
+Loss:
+{" "}
+{memory.loss}%
+
+</div>
+
+<br/>
+
+<div>
+
+Original
+
+</div>
+
+<p>
+
+{
+memory.original
+}
+
+</p>
+
+<br/>
+
+<div>
+
+Recovered
+
+</div>
+
+<p>
+
+{
+memory.recovered
+}
+
+</p>
 
 </div>
 
