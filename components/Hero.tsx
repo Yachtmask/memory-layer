@@ -1,5 +1,6 @@
 "use client";
 
+import NetworkField from "./NetworkField";
 import MemoryInput from "./MemoryInput";
 
 export default function Hero(){
@@ -8,7 +9,15 @@ return(
 
 <section className="hero">
 
-<div className="noise"/>
+<NetworkField/>
+
+<div className="content">
+
+<div className="label">
+
+ARCHIVE 0001
+
+</div>
 
 <h1>
 
@@ -26,6 +35,8 @@ when the network forgets?
 </p>
 
 <MemoryInput/>
+
+</div>
 
 </section>
 
