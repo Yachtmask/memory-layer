@@ -1,0 +1,13 @@
+{
+  "name": "memory-layer",
+  "private": true,
+  "scripts": {
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "framer-motion": "^12",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
