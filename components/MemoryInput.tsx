@@ -1,6 +1,8 @@
 "use client";
 
-import {useState} from "react";
+import {
+useState
+} from "react";
 
 export default function MemoryInput(){
 
@@ -10,41 +12,68 @@ setMessage
 ]=useState("");
 
 const[
+phase,
+setPhase
+]=useState("");
+
+const[
 result,
 setResult
 ]=useState("");
 
-function fragment(){
+function simulate(){
 
 if(!message)return;
 
-let pieces=
-message
-.split("");
-
-let visible=
-pieces
-.filter(
-()=>Math.random()>.4
+setPhase(
+"encoding"
 );
 
 setTimeout(()=>{
 
-setResult(
-visible.join("")
-)
+setPhase(
+"propagating"
+);
 
-},900)
+},900);
+
+setTimeout(()=>{
+
+setPhase(
+"loss"
+);
+
+},2200);
+
+setTimeout(()=>{
+
+let chars=
+message.split("");
+
+let keep=
+chars.filter(
+()=>Math.random()>.25
+);
+
+setResult(
+keep.join("")
+);
+
+setPhase(
+"recovering"
+);
+
+},3500);
 
 }
 
 return(
 
-<div>
+<div className="memory">
 
 <textarea
 
-placeholder="Leave memory"
+placeholder="Leave something worth preserving"
 
 value={message}
 
@@ -58,25 +87,46 @@ e.target.value
 />
 
 <button
-onClick={fragment}
+onClick={simulate}
 >
 
-Propagate
+Begin Propagation
 
 </button>
 
 {
-result&&(
 
-<div>
+phase&&(
 
-Recovered
+<div className="state">
 
-<div>
+{phase==="encoding"&&"Encoding memory"}
 
-{result}
+{phase==="propagating"&&"Traversing network"}
+
+{phase==="loss"&&"Packet loss detected"}
+
+{phase==="recovering"&&"Recovery complete"}
 
 </div>
+
+)
+
+}
+
+{
+
+result&&(
+
+<div className="recovered">
+
+<div className="tag">
+
+RECOVERED
+
+</div>
+
+{result}
 
 </div>
 
